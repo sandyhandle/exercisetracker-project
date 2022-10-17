@@ -50,6 +50,7 @@ app.post("/api/users", (req, res) => {
 
 app.post("/api/users/:id/exercises", (req, res) => {
   const id = req.params.id
+  console.log(req.params.id);
   const {description, duration, date} = req.body
   User.findById(id, (err, userData) => {
     if(err || !userData) {
@@ -81,7 +82,9 @@ app.post("/api/users/:id/exercises", (req, res) => {
 
 app.get("/api/users/:id/logs", (req, res) => {
   const { from, to, limit } = req.query;
+  console.log(req.params.id);
   const {id} = req.params;
+  console.log(id);
   User.findById(id, (err, userData) => {
     if(err || !userData) {
       res.send("Could not find user");
@@ -109,7 +112,7 @@ app.get("/api/users/:id/logs", (req, res) => {
           const {username, _id} = userData;
           const log= rawLog.map((l) => ({
             description: l.description,
-            duration: l.duration,
+            duration: +l.duration,
             date: l.date.toDateString()
           }))
           res.json({username, count, _id, log})
